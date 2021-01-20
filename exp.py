@@ -17,10 +17,10 @@ def exp(url, cmd):
         page=r.text
         page=etree.HTML(page)
         data = page.xpath('//a[@id]/@id')
-        if data[0] == None:
-            print(data[0])
-        else:
+        if len(data) < 1:
             print("结果为空")
+        else:
+            print(data[0])
     except:
         print("执行出现异常错误")
 
